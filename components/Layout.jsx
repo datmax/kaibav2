@@ -12,7 +12,7 @@ export default function Layout({ children }) {
     <>
       <Menu show={show} setShow={setShow}></Menu>
 
-      <div className="min-h-screeb w-full bg-bg bg-cover bg-center">
+      <div className="min-h-screeb w-full bg-bg bg-cover bg-center bg-black">
         <div className="bg-gradient-to-tr from-main/10 via-black/50  to-black/20 px-4 pt-4 sm:px-8 lg:px-20 ">
           <div className="grid w-full grid-cols-2 ">
             <img
