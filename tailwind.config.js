@@ -4,7 +4,15 @@ module.exports = {
     './components/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        bg: "url('/kaibabg.webp')",
+      },
+      colors: {
+        main: '#08D4B0',
+        shadeblack: "#00000F"
+      },
+    },
   },
   plugins: [],
 }

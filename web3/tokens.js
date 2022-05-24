@@ -1,0 +1,106 @@
+const tokens = [
+  {
+    address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+    name: 'Ethereum',
+    symbol: 'ETH',
+    decimals: '18',
+    logo: 'https://assets.coingecko.com/coins/images/279/thumb/ethereum.png?1595348880',
+    thumbnail:
+      'https://assets.coingecko.com/coins/images/279/thumb/ethereum.png?1595348880',
+  },
+  {
+    address: '0xf2210f65235c2fb391ab8650520237e6378e5c5a',
+    name: 'Kaiba DeFi',
+    symbol: 'KAIBA',
+    decimals: '9',
+    logo: 'https://assets.coingecko.com/coins/images/19990/thumb/kaiba.png?1640740626',
+  },
+  {
+    address: '0x988fc5e37281f6c165886db96b3fdd2f61e6bb3f',
+    name: 'Fang Token',
+    symbol: 'FANG',
+    decimals: '18',
+    logo: 'https://res.cloudinary.com/mazculo/image/upload/v1648971612/fang_lo2pax.jpg',
+  },
+  {
+    address: '0xA67E9F021B9d208F7e3365B2A155E3C55B27de71',
+    name: 'Klee Kai',
+    symbol: 'KLEE',
+    decimals: '9',
+    logo: 'https://assets.coingecko.com/coins/images/15548/small/Klee-Kai-Logo.png?1628258448',
+  },
+  {
+    address: '0x7ccb2b7d0e8455b6be9c39417e5fe855aa831fd8',
+    name: 'Crypto Lyst',
+    symbol: 'LYST',
+    decimals: '18',
+    logo: '/lyst.jpg',
+  },
+  {
+    address: '0x406b9dca8b52f08385014ec1ed1cf6a0d5c01289',
+    name: 'Meishu',
+    symbol: 'MEISHU',
+    decimals: '9',
+    logo: null,
+    logo: '/meishu.jpg',
+  },
+  {
+    address: '0xca7b3ba66556c4da2e2a9afef9c64f909a59430a',
+    name: 'WOLVERINU',
+    symbol: 'WOLVERINU',
+    decimals: '9',
+    logo:
+      'https://assets.coingecko.com/coins/images/19374/small/logo200.png?1643189122',
+  },
+  {
+    address: '0xf5b1fd29d23e98db2d9ebb8435e1082e3b38fb65',
+    name: 'Kishimoto Inu',
+    symbol: 'KISHIMOTO',
+    decimals: '9',
+    logo: '/kishimoto.png',
+  },
+  {
+    address: '0xde2667febd1499b698a15de4a01b991a30afae59',
+    name: 'Dazed Dogs Token',
+    symbol: 'DDOGS',
+    decimals: '9',
+    logo: 'https://res.cloudinary.com/mazculo/image/upload/v1650921076/photo_2022-04-25_23.10.33_fekiti.jpg',
+  },
+  {
+    address: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
+    name: 'Wrapped BTC',
+    symbol: 'WBTC',
+    decimals: '8',
+    logo: 'https://cdn.moralis.io/eth/0x2260fac5e5542a773aa44fbcfedf7c193bc2c599.png',
+  },
+  {
+    address: '0x6b175474e89094c44da98b954eedeac495271d0f',
+    name: 'Dai Stablecoin',
+    symbol: 'DAI',
+    decimals: '18',
+    logo: 'https://cdn.moralis.io/eth/0x6b175474e89094c44da98b954eedeac495271d0f.png',
+  },
+  {
+    address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+    name: 'USD Coin',
+    symbol: 'USDC',
+    decimals: '6',
+    logo: 'https://cdn.moralis.io/eth/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.png',
+  },
+  {
+    address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+    name: 'Wrapped Ether',
+    symbol: 'WETH',
+    decimals: '18',
+    logo: 'https://cdn.moralis.io/eth/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2.png',
+  },
+  {
+    address: '0xdac17f958d2ee523a2206206994597c13d831ec7',
+    name: 'Tether USD',
+    symbol: 'USDT',
+    decimals: '6',
+    logo: 'https://cdn.moralis.io/eth/0xdac17f958d2ee523a2206206994597c13d831ec7.png',
+  },
+]
+
+export default tokens
