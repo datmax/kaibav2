@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
-
+import { useContext } from 'react'
+import { Web3Context } from '../context/web3Context'
 const connectAnimation = {
   x: [5, 10, 2, 0],
   transition: {
@@ -23,6 +24,7 @@ const animations = {
 }
 
 export default function ConnectButton() {
+  const { connect } = useContext(Web3Context)
   return (
     <motion.p
       whileHover={connectAnimation}
@@ -31,6 +33,7 @@ export default function ConnectButton() {
       animate="animate"
       exit="exit"
       className=" hover:cursor-pointer hover:text-main"
+      onClick={connect}
     >
       Connect
     </motion.p>

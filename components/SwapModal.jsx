@@ -1,5 +1,5 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import tokens from '../web3/tokens'
@@ -155,10 +155,17 @@ export default function SwapModal({
   setOpen,
   currentInput,
   currentOutput,
+  onClose,
 }) {
   const [step, setStep] = useState(0)
   const [newInput, setNewInput] = useState(null)
   const [newOutput, setNewOutput] = useState(null)
+
+  useEffect(() => {
+    if (step == 2) {
+      closeHandler()
+    }
+  }, [step])
 
   const changeInputHandler = (token) => {
     console.log('input ')
@@ -167,11 +174,15 @@ export default function SwapModal({
   }
 
   const changeOutputHandler = (token) => {
+    console.log(token)
     setNewOutput(token)
+    setStep(2)
   }
 
   const closeHandler = () => {
     setStep(0)
+    console.log(newInput, newOutput)
+    onClose(newInput, newOutput)
     setOpen(false)
   }
 
@@ -181,7 +192,7 @@ export default function SwapModal({
         as="div"
         className="relative z-10"
         open={open}
-        onClose={closeHandler}
+        onClose={() => setOpen(false)}
       >
         <Transition.Child
           as={Fragment}
@@ -242,10 +253,7 @@ export default function SwapModal({
                         key="miao"
                         variants={tokensVariant}
                       >
-                        <Output
-                          onNextStep={() => {}}
-                          onChangeOutput={(token) => console.log(token)}
-                        ></Output>
+                        <Output onChangeOutput={changeOutputHandler}></Output>
                       </motion.div>
                     )}
                   </AnimatePresence>
