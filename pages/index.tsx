@@ -9,6 +9,11 @@ const Home: NextPage = () => {
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <div className="text-xl text-white text-center">
+        <p>Kaibexv2 is a preview of the upcoming Kaibex update.</p>
+        <p className='underline'>Evrything you see is a WIP and subject to change.</p>
+        <p>Click on the wolf logo for the menu.</p>
+      </div>
     </div>
   )
 }

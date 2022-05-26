@@ -4,11 +4,14 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect, useContext } from 'react'
 import { Web3Context } from '../context/web3Context'
 import ConnectButton from './ConenctButton'
-import Jazzicon from 'react-jazzicon'
+import Jazzicon, {jsNumberForAddress} from 'react-jazzicon'
 
 export default function Layout({ children }) {
   const [show, setShow] = useState(false)
   const { address, connect, network } = useContext(Web3Context)
+
+
+
   return (
     <>
       <Menu show={show} setShow={setShow}></Menu>
@@ -26,13 +29,16 @@ export default function Layout({ children }) {
                 {!address && <ConnectButton></ConnectButton>}
                 {address && (
                   <div className="flex items-center">
-                    <span className='mx-2'>
-                    {address.slice(0, 4) +
-                      '...' +
-                      address.slice(address.length - 4, address.length)}
+                    <span className="mx-2">
+                      {address.slice(0, 4) +
+                        '...' +
+                        address.slice(address.length - 4, address.length)}
                     </span>
-                   
-                    <Jazzicon seed={address} diameter={20} />
+
+                    <Jazzicon
+                      seed={jsNumberForAddress(address)}
+                      diameter={20}
+                    />
                   </div>
                 )}
               </AnimatePresence>

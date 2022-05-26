@@ -44,7 +44,7 @@ export default function useProvider() {
     setProvider(null)
     setNetwork(null)
     setAddress(null)
-    setBalance(null)
+    setBalance(0)
     setConnected(false)
     setConnecting(false)
     setBlock(null)

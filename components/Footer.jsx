@@ -1,3 +1,5 @@
 export default function Footer() {
-  return <div className="text-white">miao</div>
+  return <div className="text-white">
+      
+  </div>
 }

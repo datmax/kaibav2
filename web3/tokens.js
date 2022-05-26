@@ -5,8 +5,6 @@ const tokens = [
     symbol: 'ETH',
     decimals: '18',
     logo: 'https://assets.coingecko.com/coins/images/279/thumb/ethereum.png?1595348880',
-    thumbnail:
-      'https://assets.coingecko.com/coins/images/279/thumb/ethereum.png?1595348880',
   },
   {
     address: '0xf2210f65235c2fb391ab8650520237e6378e5c5a',
@@ -44,14 +42,7 @@ const tokens = [
     logo: null,
     logo: '/meishu.jpg',
   },
-  {
-    address: '0xca7b3ba66556c4da2e2a9afef9c64f909a59430a',
-    name: 'WOLVERINU',
-    symbol: 'WOLVERINU',
-    decimals: '9',
-    logo:
-      'https://assets.coingecko.com/coins/images/19374/small/logo200.png?1643189122',
-  },
+
   {
     address: '0xf5b1fd29d23e98db2d9ebb8435e1082e3b38fb65',
     name: 'Kishimoto Inu',
