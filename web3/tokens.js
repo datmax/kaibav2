@@ -1,4 +1,4 @@
-const tokens = [
+const staticTokens = [
   {
     address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
     name: 'Ethereum',
@@ -94,4 +94,4 @@ const tokens = [
   },
 ]
 
-export default tokens
+export default staticTokens

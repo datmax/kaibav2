@@ -61,6 +61,7 @@ export default function useProvider() {
             cacheProvider: true,
             disableInjectedProvider: false,
             providerOptions, // required
+       
           })
           const instance = await web3Modal.connect()
           const provider = new ethers.providers.Web3Provider(instance)

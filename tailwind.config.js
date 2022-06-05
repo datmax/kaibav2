@@ -10,7 +10,8 @@ module.exports = {
       },
       colors: {
         main: '#08D4B0',
-        shadeblack: "#00000F"
+        shadeblack: "#00000F",
+        error: "#D40845"
       },
     },
   },

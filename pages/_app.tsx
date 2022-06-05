@@ -6,6 +6,7 @@ import { Web3Provider } from '../context/web3Context'
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Web3Provider>
+      
       <Layout>
         <Component {...pageProps} />
       </Layout>

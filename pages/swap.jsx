@@ -2,25 +2,33 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { FaCog, FaAngleDown } from 'react-icons/fa'
 import { motion } from 'framer-motion'
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, useMemo } from 'react'
 import SwapExchange from '../components/SwapExchange'
 import SwapModal from '../components/SwapModal'
 import LimitSwap from '../components/LimitSwap'
 import MarketSwap from '../components/MarketSwap'
 import { Web3Context } from '../context/web3Context'
 
-import tokens from '../web3/tokens'
+import staticTokens from '../web3/tokens'
 const Swap = () => {
   const { address, provider, balance, network } = useContext(Web3Context)
-  const [input, setInput] = useState(tokens[0])
-  const [output, setOutput] = useState(tokens[1])
+
+  const [input, setInput] = useState(staticTokens[0])
+  const [output, setOutput] = useState(staticTokens[1])
   const [showTokenModal, setShowTokenModal] = useState(false)
+  const [isBuying, setIsBuying] = useState(true)
   const [type, setType] = useState(0) //0: MARKET; 1:LIMIT
   const swapHandler = (newInput, newOutput) => {
     console.log('miao')
     setInput(newInput)
     setOutput(newOutput)
   }
+
+  useMemo(() => {
+    const temp = output
+    setOutput(input)
+    setInput(output)
+  }, [isBuying])
 
   return (
     <>
@@ -73,16 +81,16 @@ const Swap = () => {
                     onClick={() => setShowTokenModal(true)}
                   >
                     <img
-                      src="kaiba-logo-white.png"
+                      src={input.logo}
                       width="36"
                       alt=""
-                      className="relative rounded-full border border-white"
+                      className="relative rounded-full "
                     />
                     <img
-                      src="kaiba-logo-white.png"
+                      src={output.logo}
                       width="20"
                       alt=""
-                      className="absolute left-2 top-1  -z-10 rounded-full border border-white"
+                      className="absolute left-2 top-1  -z-10 rounded-full "
                     />
 
                     <p className="pl-2 text-lg sm:text-2xl">
@@ -106,8 +114,22 @@ const Swap = () => {
 
             <div className="rounded-lg bg-shadeblack ">
               <div className="grid grid-cols-2 gap-2 text-xl font-thin">
-                <button className="rounded-md bg-main py-1">Buy</button>
-                <button className=" rounded-md py-1">Sell</button>
+                <button
+                  className={
+                    isBuying ? 'rounded-md bg-main  py-1' : 'rounded-md  py-1'
+                  }
+                  onClick={() => setIsBuying(true)}
+                >
+                  Buy
+                </button>
+                <button
+                    className={
+                      isBuying ? 'rounded-md   py-1' : 'rounded-md bg-error  py-1'
+                    }
+                  onClick={() => setIsBuying(false)}
+                >
+                  Sell
+                </button>
               </div>
             </div>
             <div className="flex gap-x-8 ">

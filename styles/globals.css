@@ -5,6 +5,7 @@
 input[type='number'] {
   -moz-appearance: textfield;
   outline: none; /* Firefox */
+  z-index: 0;
 }
 
 input::-webkit-outer-spin-button,
@@ -16,7 +17,6 @@ input::-webkit-inner-spin-button {
 
 
 input[type=range] {
-
 }
 
 input[type=range]::-webkit-slider-thumb {
@@ -29,3 +29,6 @@ input[type=range]::-webkit-slider-thumb {
     cursor: pointer;
     border-radius: 100%;
 }
+
+
+.web3modal-modal-lightbox { z-index: 10 !important; }

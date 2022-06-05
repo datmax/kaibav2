@@ -2,6 +2,7 @@ import { ethers, providers } from 'ethers'
 import uniswap from '../web3/uniswap'
 import { useState, useEffect, useMemo } from 'react'
 import erc20 from '../web3/erc20'
+import toast from 'react-hot-toast'
 
 type token = {
   address: string
@@ -41,82 +42,49 @@ const useSwap = (currentInput: token, currentOutput: token) => {
     if (from.symbol == 'ETH') {
       const contract = new ethers.Contract(uniswap.address, uniswap.abi, signer)
       console.log(from, to, input, output, signer, addy)
-      contract
-        .swapExactETHForTokensSupportingFeeOnTransferTokens(
-          //output * Math.pow(10, to.decimals),
-          0,
-          [from.address, to.address],
-          addy,
-          Date.now() + 60 * 5,
-          {
-            value: BigInt(input * Math.pow(10, 18)),
-          }
-        )
-        .then((res: any) => {
-          res
-            .wait()
-            .then((confirm: any) => {
-              return confirm
-            })
-            .catch((err: string) => {
-              console.error(err)
-              return new Error(err)
-            })
-        })
-        .catch((err: string) => {
-          console.error(err)
-        })
+      return contract.swapExactETHForTokensSupportingFeeOnTransferTokens(
+        //output * Math.pow(10, to.decimals),
+        0,
+        [from.address, to.address],
+        addy,
+        Date.now() + 60 * 5,
+        {
+          value: BigInt(input * Math.pow(10, 18)),
+        }
+      )
     } else if (to.symbol == 'ETH') {
       const contract = new ethers.Contract(uniswap.address, uniswap.abi, signer)
       console.log(from, to, input, output, signer, addy)
-      contract
-        .swapExactTokensForETHSupportingFeeOnTransferTokens(
-          input * Math.pow(10, from.decimals),
-          0,
-          [from.address, to.address],
-          addy,
-          Date.now() + 60 * 5
-        )
-        .then((res: any) => {
-          res
-            .wait()
-            .then((confirm: any) => {
-              return confirm
-            })
-            .catch((err: string) => {
-              console.error(err)
-              return new Error(err)
-            })
-        })
-        .catch((err: string) => {
-          console.error(err)
-        })
+      return contract.swapExactTokensForETHSupportingFeeOnTransferTokens(
+        input * Math.pow(10, from.decimals),
+        0,
+        [from.address, to.address],
+        addy,
+        Date.now() + 60 * 5
+      )
     } else {
       const contract = new ethers.Contract(uniswap.address, uniswap.abi, signer)
       console.log(from, to, input, output, signer, addy)
-      contract
-        .swapExactTokensForTokensSupportingFeeOnTransferTokens(
-          input * Math.pow(10, from.decimals),
-          0,
-          [from.address, to.address],
-          addy,
-          Date.now() + 60 * 5
-        )
-        .then((res: any) => {
-          res
-            .wait()
-            .then((confirm: any) => {
-              return confirm
-            })
-            .catch((err: string) => {
-              console.error(err)
-              return new Error(err)
-            })
-        })
-        .catch((err: string) => {
-          console.error(err)
-        })
+      return contract.swapExactTokensForTokensSupportingFeeOnTransferTokens(
+        input * Math.pow(10, from.decimals),
+        0,
+        [from.address, to.address],
+        addy,
+        Date.now() + 60 * 5
+      )
     }
+  }
+
+  const fetchTokenData = async (address: string) => {
+    const data = await fetch(
+      'https://api.coingecko.com/api/v3/coins/ethereum/contract/' + address,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+    const parsed = await data.json()
   }
 
   return {

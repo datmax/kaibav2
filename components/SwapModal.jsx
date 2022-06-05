@@ -2,10 +2,8 @@
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { motion, AnimatePresence } from 'framer-motion'
-import tokens from '../web3/tokens'
-
 import { FiMinus } from 'react-icons/fi'
-
+import staticTokens from '../web3/tokens'
 const variant = {
   initial: {
     opacity: 0,
@@ -36,6 +34,7 @@ const tokensVariant = {
     x: 0,
     transition: {
       duration: 0.1,
+      staggerChildren: 0.01,
     },
   },
   exit: {
@@ -51,9 +50,17 @@ const linkAnimation = {
   x: 20,
 }
 
-function Input({ onChangeInput, onNextStep, currentToken }) {
+function Input({
+  onChangeInput,
+  onNextStep,
+  onSearch,
+  search,
+  searching,
+  res,
+  tokens,
+}) {
   const [current, setCurrent] = useState(null)
-
+  console.log(res, res.error == undefined)
   return (
     <AnimatePresence>
       <div>
@@ -81,30 +88,59 @@ function Input({ onChangeInput, onNextStep, currentToken }) {
             whileFocus={{ borderColor: '#08D4B0' }}
             type="text"
             className="mt-6 border-b bg-transparent py-2 text-center focus:outline-none focus:ring-0 active:outline-none lg:mx-8"
+            onChange={onSearch}
+            value={search}
           />
-
-          <div className="flex flex-wrap px-8">
-            {tokens.map((el, index) => (
-              <motion.button
-                key={index}
-                whileHover={{ border: '1px solid pink' }}
-                className=" mx-2 my-2 flex flex-grow items-center justify-center rounded-md border border-transparent px-2 py-2"
-                onClick={() => onChangeInput(el)}
-              >
-                <img src={el.logo} className="mr-2 w-8 rounded-full" alt="" />
-                <span>{el.symbol}</span>
-              </motion.button>
-            ))}
-          </div>
+          {!searching && (
+            <div className="flex flex-wrap px-8">
+              {tokens?.map((el, index) => (
+                <motion.button
+                  key={index}
+                  whileHover={{ border: '1px solid pink' }}
+                  className=" mx-2 my-2 flex flex-grow items-center justify-center rounded-md border border-transparent px-2 py-2"
+                  onClick={() => onChangeInput(el)}
+                >
+                  <img src={el.logo} className="w-8 rounded-full pr-2" alt="" />
+                  <span>{el.symbol}</span>
+                </motion.button>
+              ))}
+            </div>
+          )}
+          {searching && (
+            <div className="mx-2 my-2 w-full  px-2 py-2">
+              {res.symbol != undefined && (
+                <motion.div className="px-8">
+                  <motion.div
+                    className="mx-2 my-2 grid grid-cols-2 items-center rounded-md border border-transparent px-8 "
+                    whileHover={{ border: '1px solid pink' }}
+                  >
+                    <div className="flex justify-start">
+                      {res.symbol.toUpperCase()}
+                    </div>
+                    <div className="flex justify-end">
+                      <img className="w-16 " src={res.image.large}></img>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              )}
+              {res.error && <div>Token not found</div>}
+            </div>
+          )}
         </div>
       </div>
     </AnimatePresence>
   )
 }
 
-function Output({ onChangeOutput, onNextStep }) {
-  const [current, setCurrent] = useState(null)
-
+function Output({
+  onChangeOutput,
+  onNextStep,
+  onSearch,
+  search,
+  searching,
+  res,
+  tokens,
+}) {
   return (
     <div>
       <div className="flex flex-row items-center justify-center px-8">
@@ -131,41 +167,105 @@ function Output({ onChangeOutput, onNextStep }) {
           whileFocus={{ borderColor: '#08D4B0' }}
           type="text"
           className="mt-6 border-b bg-transparent py-2 text-center focus:outline-none focus:ring-0 active:outline-none lg:mx-8"
+          onChange={onSearch}
+          value={search}
         />
-        <div className="flex flex-wrap px-8">
-          {tokens.map((el, index) => (
-            <motion.button
-              key={index}
-              whileHover={{ border: '1px solid pink' }}
-              className=" mx-2 my-2 flex flex-grow items-center justify-center rounded-md border border-transparent px-2 py-2"
-              onClick={() => onChangeOutput(el)}
-            >
-              <img src={el.logo} className="mr-2 w-8 rounded-full" alt="" />
-              <span>{el.symbol}</span>
-            </motion.button>
-          ))}
-        </div>
+        {!searching && (
+          <div className="flex flex-wrap px-8">
+            {tokens?.map((el, index) => (
+              <motion.button
+                key={index}
+                whileHover={{ border: '1px solid pink' }}
+                className=" mx-2 my-2 flex flex-grow items-center justify-center rounded-md border border-transparent px-2 py-2"
+                onClick={() => onChangeOutput(el)}
+              >
+                <img src={el.logo} className="w-8 rounded-full pr-2" alt="" />
+                <span>{el.symbol}</span>
+              </motion.button>
+            ))}
+          </div>
+        )}
+        {searching && (
+          <div className="mx-2 my-2 w-full  px-2 py-2">
+            {res.error != undefined && (
+              <motion.div className="px-8">
+                <motion.div
+                  onClick={onChangeOutput}
+                  className="mx-2 my-2 grid grid-cols-2 items-center rounded-md border border-transparent px-8 "
+                  whileHover={{ border: '1px solid pink' }}
+                >
+                  <div className="flex justify-start">
+                    {res.symbol.toUpperCase()}
+                  </div>
+                  <div className="flex justify-end">
+                    <img className="w-16 " src={res.image.large}></img>
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+            {res.error && <div>Token not found</div>}
+          </div>
+        )}
       </div>
     </div>
   )
 }
 
-export default function SwapModal({
-  open,
-  setOpen,
-  currentInput,
-  currentOutput,
-  onClose,
-}) {
+export default function SwapModal({ open, setOpen, onClose }) {
   const [step, setStep] = useState(0)
   const [newInput, setNewInput] = useState(null)
   const [newOutput, setNewOutput] = useState(null)
+  const [search, setSearch] = useState('')
+  const [searching, setSearching] = useState(false)
+  const [res, setRes] = useState({})
+  const [tokens, setTokens] = useState(staticTokens)
+
+  useEffect(() => {
+    let stored = localStorage.getItem('tokens')
+    if (stored) {
+      setTokens((currentList) => {
+        return [...currentList, ...JSON.parse(stored)]
+      })
+    }
+  }, [])
+  const addTokenHandler = (token) => {
+    let inTokens = false
+    tokens.forEach((currentToken) => {
+      if (token.address == currentToken.address) {
+        inTokens = true
+      }
+    })
+    if (!inTokens) {
+      console.log('Culo!')
+      let saved = localStorage.getItem('tokens')
+      if (saved != null) {
+        saved = JSON.parse(saved)
+
+        localStorage.setItem('tokens', JSON.stringify([...saved, token]))
+      } else {
+        console.log('hello???')
+        localStorage.setItem('tokens', JSON.stringify([token]))
+      }
+
+      setTokens((currentList) => {
+        return [...currentList, token]
+      })
+    }
+  }
 
   useEffect(() => {
     if (step == 2) {
       closeHandler()
     }
+    setSearching(false)
+    setSearch('')
   }, [step])
+
+  useEffect(() => {
+    if (search == '') {
+      setSearching(false)
+    }
+  }, [search])
 
   const changeInputHandler = (token) => {
     console.log('input ')
@@ -179,11 +279,27 @@ export default function SwapModal({
     setStep(2)
   }
 
+  const addToken = (token) => {}
+
   const closeHandler = () => {
     setStep(0)
     console.log(newInput, newOutput)
     onClose(newInput, newOutput)
     setOpen(false)
+  }
+
+  const searchHandler = async (e) => {
+    setSearch(e.target.value)
+    const res = await fetchToken(e.target.value)
+    console.log(res.error)
+    setRes(res)
+    e.target.value.length <= 0 ? setSearching(false) : setSearching(true)
+  }
+
+  const fetchToken = async (address) => {
+    
+    console.log(parsed)
+    return parsed
   }
 
   return (
@@ -235,12 +351,18 @@ export default function SwapModal({
                         animate="animate"
                         exit="exit"
                         variants={tokensVariant}
+                        key="input"
                       >
                         <Input
                           key="input"
                           currentToken={newInput}
                           onNextStep={() => setStep(1)}
                           onChangeInput={changeInputHandler}
+                          onSearch={searchHandler}
+                          search={search}
+                          searching={searching}
+                          res={res}
+                          tokens={tokens}
                         ></Input>
                       </motion.div>
                     )}
@@ -253,7 +375,17 @@ export default function SwapModal({
                         key="miao"
                         variants={tokensVariant}
                       >
-                        <Output onChangeOutput={changeOutputHandler}></Output>
+                        <Output
+                          key="output"
+                          onChangeOutput={changeOutputHandler}
+                          onNextStep={() => setStep(2)}
+                          onSearch={searchHandler}
+                          search={search}
+                          searching={searching}
+                          res={res}
+                          tokens={tokens}
+                          
+                        ></Output>
                       </motion.div>
                     )}
                   </AnimatePresence>
