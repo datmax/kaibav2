@@ -21,7 +21,7 @@ export function useFarmsStatic() {
 
   const [block, setBlock] = useState('-')
 
-  const provider = new ethers.providers.StaticJsonRpcProvider(url)
+  const provider = new ethers.providers.InfuraProvider("mainnet", "8e8c4801cca84a098f713f7821399ee9" )
   const farmContract = new ethers.Contract(farms.address, farms.abi, provider)
 
   useEffect(async () => {
@@ -113,7 +113,8 @@ export function useFarmsStatic() {
 }
 
 export function useFarmsDynamic(user) {
-  const provider = new ethers.providers.StaticJsonRpcProvider(url)
+  const provider = new ethers.providers.InfuraProvider("mainnet", "8e8c4801cca84a098f713f7821399ee9")
+  provider.pollingInterval = 15000
   const farmContract = new ethers.Contract(farms.address, farms.abi, provider)
   const [userFarms, setUserFarms] = useState([])
   const [loading, setLoading] = useState(false)

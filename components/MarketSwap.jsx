@@ -3,9 +3,9 @@ import { useState, useEffect, useContext } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 import { Web3Context } from '../context/web3Context'
 import useSwap from '../hooks/useSwap'
-import { getTokenBalance } from '../web3/web3Helper'
+import { changeNetwork, getTokenBalance } from '../web3/web3Helper'
 
-function MarketSwap({ input, output, type }) {
+function MarketSwap({ input, output, type, deadline, slippage }) {
   const { balance, address, network, provider, connect } =
     useContext(Web3Context)
 
@@ -93,9 +93,24 @@ function MarketSwap({ input, output, type }) {
       const signer = await provider.getSigner()
       setApproving(true)
       approve(address, input.address).then((res) => {
-        res.wait().then((res) => {
-          setApproving(false)
-        })
+        res
+          .wait()
+          .then((res) => {
+            setApproving(false)
+            setApproved(true)
+          })
+          .catch((err) => {
+            toast.error(err)
+            setApproving(false)
+          })
+          .catch((err) => {
+            toast.error(err)
+            setApproving(false)
+          })
+          .catch((err) => {
+            toast.error('Tx rejected.')
+            setApproving(false)
+          })
       })
     }
   }
@@ -103,10 +118,11 @@ function MarketSwap({ input, output, type }) {
   const confirmSwap = async () => {
     if (network == 1) {
       const signer = await provider.getSigner()
-
+      const correctedOutputAmount =
+        outputAmount - (outputAmount / 100) * slippage
       setSwapping(true)
       toast.success('Swapping...')
-      swap(input, output, inputAmount, outputAmount, signer, address)
+      swap(input, output, inputAmount, correctedOutputAmount, signer, address)
         .then((res) => {
           res
             .wait()
@@ -211,8 +227,20 @@ function MarketSwap({ input, output, type }) {
             connect
           </motion.button>
         )}
+        {address && network != 1 && (
+          <motion.button
+            whileHover={{
+              backgroundColor: '#08D4B0',
+              transition: { duration: 0.3 },
+            }}
+            className="rounded-lg bg-white px-2 py-2 text-center text-xl font-thin text-black"
+            onClick={changeNetwork}
+          >
+            Change Network
+          </motion.button>
+        )}
 
-        {address && !swapping && approved && (
+        {address && !swapping && approved && network == 1 && (
           <motion.button
             whileHover={{
               backgroundColor: '#08D4B0',
@@ -225,22 +253,28 @@ function MarketSwap({ input, output, type }) {
           </motion.button>
         )}
         {address && !swapping && !approved && (
-          <motion.button
-            whileHover={{
-              backgroundColor: '#08D4B0',
-              transition: { duration: 0.3 },
-            }}
-            className="rounded-lg bg-white px-2 py-2 text-center text-xl font-thin text-black"
-            onClick={confirmSwap}
-          >
-            Approve
-          </motion.button>
+          <>
+            {!approving && (
+              <motion.button
+                whileHover={{
+                  backgroundColor: '#08D4B0',
+                  transition: { duration: 0.3 },
+                }}
+                className="rounded-lg bg-white px-2 py-2 text-center text-xl font-thin text-black"
+                onClick={confirmSwap}
+              >
+                Approve
+              </motion.button>
+            )}
+            {approving && (
+              <motion.button className="rounded-lg bg-white px-2 py-2 text-center text-xl font-thin text-black">
+                Approving...
+              </motion.button>
+            )}
+          </>
         )}
         {address && swapping && (
-          <motion.button
-            className="rounded-lg bg-main px-2 py-2 text-center text-xl font-thin text-black"
-            onClick={confirmSwap}
-          >
+          <motion.button className="rounded-lg bg-main px-2 py-2 text-center text-xl font-thin text-black">
             swapping...
           </motion.button>
         )}

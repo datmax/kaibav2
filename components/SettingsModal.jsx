@@ -89,7 +89,7 @@ export default function SettingsModal({ open, setOpen, slippage, setSlippage, de
                     >
                       
                       <div className="grid grid-cols-2">
-                        <h1>Slippage: </h1>
+                        <h1>Slippage(%): </h1>
                         <input
                           type="number"
                           className="bg-transparent font-thin text-white"
@@ -99,7 +99,7 @@ export default function SettingsModal({ open, setOpen, slippage, setSlippage, de
                         />
                       </div>
                       <div className="grid grid-cols-2">
-                        <h1>Deadline: </h1>
+                        <h1>Deadline(m): </h1>
                         <input
                           value={deadline}
                           type="number"

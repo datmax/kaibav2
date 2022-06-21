@@ -1,5 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { ethers } from 'ethers'
+import { useContext } from 'react'
+import { Web3Context } from '../context/web3Context'
+
 import Link from 'next/link'
 const links = [
   { name: 'Swap', href: '/swap' },
@@ -32,6 +35,7 @@ const linkAnimation = {
 }
 
 export default function Menu({ show, setShow }) {
+  const { address, balance } = useContext(Web3Context)
   return (
     <AnimatePresence>
       {show && (
@@ -47,9 +51,14 @@ export default function Menu({ show, setShow }) {
             exit="exit"
             className="relative pt-20 font-thin"
           >
-            <h1 className="w-full text-center font-thin"> 2.4 ETH</h1>
+            <h1 className="w-full text-center font-thin">
+              {balance && balance + "ETH"} 
+            </h1>
             <h1 className="mb-20 w-full py-4 text-center font-thin">
-              0x000000000000000
+              {address &&
+                address.slice(0, 4) +
+                  '...' +
+                  address.slice(address.length - 4, address.length)}
             </h1>
             <div>
               <svg

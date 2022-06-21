@@ -14,8 +14,8 @@ import staticTokens from '../web3/tokens'
 const Swap = () => {
   const { address, provider, balance, network } = useContext(Web3Context)
 
-  const [input, setInput] = useState(staticTokens[0])
-  const [output, setOutput] = useState(staticTokens[1])
+  const [input, setInput] = useState(staticTokens[1])
+  const [output, setOutput] = useState(staticTokens[0])
   const [deadline, setDeadline] = useState(30)
   const [slippage, setSlippage] = useState(1)
   const [showTokenModal, setShowTokenModal] = useState(false)
@@ -23,7 +23,6 @@ const Swap = () => {
   const [showSettingsModal, setShowSettingsModal] = useState(false)
   const [type, setType] = useState(0) //0: MARKET; 1:LIMIT
   const swapHandler = (newInput, newOutput) => {
-    console.log('miao')
     setInput(newInput)
     setOutput(newOutput)
   }
@@ -160,6 +159,8 @@ const Swap = () => {
             output={output}
             type={type}
             balance={balance}
+            deadline={deadline}
+            slippage={slippage}
           ></MarketSwap>
         </div>
       </motion.div>

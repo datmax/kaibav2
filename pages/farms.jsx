@@ -33,7 +33,7 @@ const Farms = () => {
       </Head>
       <div className="pt-20 text-center font-thin text-white">
         <h1 className="pb-4 text-3xl">Farms</h1>
-        <h1 className="text-xl"> TVL: {tvl}</h1>
+        <h1 className="text-xl"> TVL: {tvl >= 0 ? tvl : "--"}</h1>
       </div>
       <div className="mt-10 grid grid-cols-1 place-content-center sm:mt-40 md:grid-cols-2">
         <FarmUnit

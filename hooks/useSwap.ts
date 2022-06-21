@@ -94,6 +94,8 @@ const useSwap = (currentInput: token, currentOutput: token) => {
     return contract.approve(uniswap.address, bigNumber)
   }
 
+  const deposit = async () => {}
+
   const previewSwap = async (
     from: token,
     to: token,
@@ -132,8 +134,8 @@ const useSwap = (currentInput: token, currentOutput: token) => {
       const contract = new ethers.Contract(uniswap.address, uniswap.abi, signer)
       console.log(from, to, input, output, signer, addy)
       return contract.swapExactETHForTokensSupportingFeeOnTransferTokens(
-        //output * Math.pow(10, to.decimals),
-        0,
+        output * Math.pow(10, to.decimals),
+        //0,
         [from.address, to.address],
         addy,
         Date.now() + 60 * 5,
@@ -146,7 +148,8 @@ const useSwap = (currentInput: token, currentOutput: token) => {
       console.log(from, to, input, output, signer, addy)
       return contract.swapExactTokensForETHSupportingFeeOnTransferTokens(
         input * Math.pow(10, from.decimals),
-        0,
+        output * Math.pow(10, to.decimals),
+
         [from.address, to.address],
         addy,
         Date.now() + 60 * 5
@@ -156,7 +159,8 @@ const useSwap = (currentInput: token, currentOutput: token) => {
       console.log(from, to, input, output, signer, addy)
       return contract.swapExactTokensForTokensSupportingFeeOnTransferTokens(
         input * Math.pow(10, from.decimals),
-        0,
+        output * Math.pow(10, to.decimals),
+
         [from.address, to.address],
         addy,
         Date.now() + 60 * 5
@@ -168,7 +172,7 @@ const useSwap = (currentInput: token, currentOutput: token) => {
     previewSwap,
     swap,
     checkAllowance,
-    approve
+    approve,
   }
 }
 

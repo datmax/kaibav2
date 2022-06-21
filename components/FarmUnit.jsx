@@ -46,7 +46,7 @@ export default function FarmUnit({ infos, apy, name, icon }) {
           />
         </svg>
         <div className="flex flex-row-reverse">
-          <div className="h-3 w-3 rounded-full bg-main"></div>
+          <div className="h-3 w-3 rounded-full bg-error"></div>
         </div>
         <div className="mt-4 grid w-full grid-cols-1 gap-4 px-4 py-4 text-center">
           <div className="flex justify-center">
@@ -57,7 +57,7 @@ export default function FarmUnit({ infos, apy, name, icon }) {
           <motion.button
             whileHover={{ backgroundColor: '#08D4B0', color: 'white' }}
             className="rounded-md bg-white py-2 font-light text-black"
-            onClick={() => setDepositModal(true)}
+            
           >
             deposit
           </motion.button>
