@@ -11,7 +11,7 @@ const staticTokens = [
     name: 'Kaiba DeFi',
     symbol: 'KAIBA',
     decimals: '9',
-    logo: 'https://assets.coingecko.com/coins/images/19990/thumb/kaiba.png?1640740626',
+    logo: '/kaiba-logo-white.png',
   },
   {
     address: '0x988fc5e37281f6c165886db96b3fdd2f61e6bb3f',

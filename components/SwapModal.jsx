@@ -4,6 +4,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FiMinus } from 'react-icons/fi'
 import staticTokens from '../web3/tokens'
+import { fetchTokenData } from '../web3/web3Helper'
 const variant = {
   initial: {
     opacity: 0,
@@ -60,7 +61,7 @@ function Input({
   tokens,
 }) {
   const [current, setCurrent] = useState(null)
-  console.log(res, res.error == undefined)
+  console.log(res)
   return (
     <AnimatePresence>
       <div>
@@ -108,22 +109,23 @@ function Input({
           )}
           {searching && (
             <div className="mx-2 my-2 w-full  px-2 py-2">
-              {res.symbol != undefined && (
+              {res && (
                 <motion.div className="px-8">
                   <motion.div
                     className="mx-2 my-2 grid grid-cols-2 items-center rounded-md border border-transparent px-8 "
                     whileHover={{ border: '1px solid pink' }}
+                    onClick={() => onChangeInput(res)}
                   >
                     <div className="flex justify-start">
                       {res.symbol.toUpperCase()}
                     </div>
                     <div className="flex justify-end">
-                      <img className="w-16 " src={res.image.large}></img>
+                      <img className="w-16 " src={res.logo}></img>
                     </div>
                   </motion.div>
                 </motion.div>
               )}
-              {res.error && <div>Token not found</div>}
+              {!res && <div>Token not found</div>}
             </div>
           )}
         </div>
@@ -187,10 +189,10 @@ function Output({
         )}
         {searching && (
           <div className="mx-2 my-2 w-full  px-2 py-2">
-            {res.error != undefined && (
+            {res && (
               <motion.div className="px-8">
                 <motion.div
-                  onClick={onChangeOutput}
+                  onClick={() => onChangeOutput(res)}
                   className="mx-2 my-2 grid grid-cols-2 items-center rounded-md border border-transparent px-8 "
                   whileHover={{ border: '1px solid pink' }}
                 >
@@ -198,12 +200,12 @@ function Output({
                     {res.symbol.toUpperCase()}
                   </div>
                   <div className="flex justify-end">
-                    <img className="w-16 " src={res.image.large}></img>
+                    <img className="w-16 " src={res.logo}></img>
                   </div>
                 </motion.div>
               </motion.div>
             )}
-            {res.error && <div>Token not found</div>}
+            {!res && <div>Token not found</div>}
           </div>
         )}
       </div>
@@ -268,13 +270,13 @@ export default function SwapModal({ open, setOpen, onClose }) {
   }, [search])
 
   const changeInputHandler = (token) => {
-    console.log('input ')
+    addTokenHandler(token)
     setNewInput(token)
     setStep(1)
   }
 
   const changeOutputHandler = (token) => {
-    console.log(token)
+    addTokenHandler(token)
     setNewOutput(token)
     setStep(2)
   }
@@ -290,16 +292,9 @@ export default function SwapModal({ open, setOpen, onClose }) {
 
   const searchHandler = async (e) => {
     setSearch(e.target.value)
-    const res = await fetchToken(e.target.value)
-    console.log(res.error)
+    const res = await fetchTokenData(e.target.value)
     setRes(res)
     e.target.value.length <= 0 ? setSearching(false) : setSearching(true)
-  }
-
-  const fetchToken = async (address) => {
-    
-    console.log(parsed)
-    return parsed
   }
 
   return (
@@ -384,7 +379,6 @@ export default function SwapModal({ open, setOpen, onClose }) {
                           searching={searching}
                           res={res}
                           tokens={tokens}
-                          
                         ></Output>
                       </motion.div>
                     )}

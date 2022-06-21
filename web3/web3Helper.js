@@ -12,7 +12,7 @@ const url = 'https://mainnet.infura.io/v3/9ed182e6c7b44c5fa80bd8c3b3779a6f'
 
 export async function getPriceByAddress(address) {
   let req = await fetch(
-    endpoint + 'erc20/' + address + '/price?chain=eth&exchange=uniswap-v2&a',
+    endpoint + 'erc20/' + address + '/price?chain=eth',
     { headers: header }
   )
   let res = await req.json()
@@ -73,4 +73,32 @@ export async function getTokenBalance(token, address) {
   console.log(token)
   const balance = await contract.balanceOf(address)
   return balance / Math.pow(10, token.decimals)
+}
+
+export async function fetchTokenData(address) {
+  const data = await fetch(
+    'https://api.coingecko.com/api/v3/coins/ethereum/contract/' + address,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  )
+  const parsed = await data.json()
+  if (!parsed.error) {
+    console.log(parsed)
+    const image = parsed.image.large
+    const symbol = parsed.symbol.toUpperCase()
+    const provider = new ethers.providers.StaticJsonRpcProvider(
+      'https://mainnet.infura.io/v3/9ed182e6c7b44c5fa80bd8c3b3779a6f'
+    )
+    const contract = new ethers.Contract(address, erc20, provider)
+    const decimals = await contract.decimals()
+    return {
+      symbol: symbol,
+      decimals: decimals,
+      address: address,
+      logo: image,
+    }
+  }
 }

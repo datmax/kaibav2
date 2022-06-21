@@ -8,6 +8,7 @@ import SwapModal from '../components/SwapModal'
 import LimitSwap from '../components/LimitSwap'
 import MarketSwap from '../components/MarketSwap'
 import { Web3Context } from '../context/web3Context'
+import SettingsModal from '../components/SettingsModal'
 
 import staticTokens from '../web3/tokens'
 const Swap = () => {
@@ -15,8 +16,11 @@ const Swap = () => {
 
   const [input, setInput] = useState(staticTokens[0])
   const [output, setOutput] = useState(staticTokens[1])
+  const [deadline, setDeadline] = useState(30)
+  const [slippage, setSlippage] = useState(1)
   const [showTokenModal, setShowTokenModal] = useState(false)
   const [isBuying, setIsBuying] = useState(true)
+  const [showSettingsModal, setShowSettingsModal] = useState(false)
   const [type, setType] = useState(0) //0: MARKET; 1:LIMIT
   const swapHandler = (newInput, newOutput) => {
     console.log('miao')
@@ -37,7 +41,20 @@ const Swap = () => {
         setOpen={setShowTokenModal}
         onClose={swapHandler}
       ></SwapModal>
-      <div className="flex min-h-screen items-center justify-center  py-2">
+      <SettingsModal
+        open={showSettingsModal}
+        deadline={deadline}
+        setDeadline={setDeadline}
+        slippage={slippage}
+        setSlippage={setSlippage}
+        setOpen={setShowSettingsModal}
+        address={address}
+      ></SettingsModal>
+      <motion.div
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="flex min-h-screen items-center justify-center  py-2"
+      >
         <Head>
           <title>Kaibex: swap</title>
           <link rel="icon" href="/favicon.ico" />
@@ -82,7 +99,7 @@ const Swap = () => {
                   >
                     <img
                       src={input.logo}
-                      width="36"
+                      width="40"
                       alt=""
                       className="relative rounded-full "
                     />
@@ -90,7 +107,7 @@ const Swap = () => {
                       src={output.logo}
                       width="20"
                       alt=""
-                      className="absolute left-2 top-1  -z-10 rounded-full "
+                      className="absolute left-2 top-2  -z-10 rounded-full "
                     />
 
                     <p className="pl-2 text-lg sm:text-2xl">
@@ -104,6 +121,7 @@ const Swap = () => {
               </div>
               <motion.div className="flex items-center justify-end">
                 <motion.div
+                  onClick={() => setShowSettingsModal(true)}
                   whileHover={{ rotateZ: 360 }}
                   className="hover:cursor-pointer"
                 >
@@ -123,9 +141,9 @@ const Swap = () => {
                   Buy
                 </button>
                 <button
-                    className={
-                      isBuying ? 'rounded-md   py-1' : 'rounded-md bg-error  py-1'
-                    }
+                  className={
+                    isBuying ? 'rounded-md   py-1' : 'rounded-md bg-error  py-1'
+                  }
                   onClick={() => setIsBuying(false)}
                 >
                   Sell
@@ -144,7 +162,7 @@ const Swap = () => {
             balance={balance}
           ></MarketSwap>
         </div>
-      </div>
+      </motion.div>
     </>
   )
 }

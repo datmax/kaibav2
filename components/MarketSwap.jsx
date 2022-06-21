@@ -15,12 +15,25 @@ function MarketSwap({ input, output, type }) {
   const [outputBalance, setOutputBalance] = useState(0)
   const [swapping, setSwapping] = useState(false)
   const [sliderValue, setSliderValue] = useState(0)
+  const [approved, setApproved] = useState(true)
+  const [approving, setApproving] = useState(false)
 
-  const { previewSwap, swap } = useSwap(input, output)
+  const { previewSwap, swap, checkAllowance, approve } = useSwap(input, output)
 
   //------BALANCE UPDATES------//
   useEffect(async () => {
     if (address) {
+      if (input.symbol != 'ETH') {
+        const allowance = await checkAllowance(address, input.address)
+        if (allowance == 0) {
+          setApproved(false)
+        } else {
+          setApproved(true)
+        }
+      } else {
+        setApproved(true)
+      }
+
       setSliderValue(0)
       if (input.symbol == 'ETH') {
         setInputBalance(balance)
@@ -51,7 +64,7 @@ function MarketSwap({ input, output, type }) {
       setOutputAmount(0)
     } else {
       setOutputAmount('...')
-      previewSwap(input, output, inputAmount)
+      previewSwap(input, output, inputAmount, outputAmount, provider, address)
         .then((res) => {
           console.log(res)
           setOutputAmount(res)
@@ -73,6 +86,18 @@ function MarketSwap({ input, output, type }) {
   const clearFields = () => {
     setInputAmount(0)
     setOutputAmount(0)
+  }
+
+  const confirmApprove = async () => {
+    if (network == 1) {
+      const signer = await provider.getSigner()
+      setApproving(true)
+      approve(address, input.address).then((res) => {
+        res.wait().then((res) => {
+          setApproving(false)
+        })
+      })
+    }
   }
 
   const confirmSwap = async () => {
@@ -173,7 +198,7 @@ function MarketSwap({ input, output, type }) {
         <p className="-mt-4 px-2 opacity-50">
           Available balance: {address ? inputBalance : 0}
         </p>
-        <p className="-mt-4 px-2 opacity-80">50$ saved </p>
+        <p className="-mt-4 hidden px-2 opacity-80">50$ saved </p>
         {!address && (
           <motion.button
             whileHover={{
@@ -187,7 +212,7 @@ function MarketSwap({ input, output, type }) {
           </motion.button>
         )}
 
-        {address && !swapping && (
+        {address && !swapping && approved && (
           <motion.button
             whileHover={{
               backgroundColor: '#08D4B0',
@@ -197,6 +222,18 @@ function MarketSwap({ input, output, type }) {
             onClick={confirmSwap}
           >
             swap
+          </motion.button>
+        )}
+        {address && !swapping && !approved && (
+          <motion.button
+            whileHover={{
+              backgroundColor: '#08D4B0',
+              transition: { duration: 0.3 },
+            }}
+            className="rounded-lg bg-white px-2 py-2 text-center text-xl font-thin text-black"
+            onClick={confirmSwap}
+          >
+            Approve
           </motion.button>
         )}
         {address && swapping && (

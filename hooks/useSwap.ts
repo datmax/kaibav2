@@ -3,6 +3,8 @@ import uniswap from '../web3/uniswap'
 import { useState, useEffect, useMemo } from 'react'
 import erc20 from '../web3/erc20'
 import toast from 'react-hot-toast'
+const bigNumber =
+  '115792089237316195423570985008687907853269984665640564039457584007913129639935'
 
 type token = {
   address: string
@@ -12,8 +14,94 @@ type token = {
   name: String
 }
 
+const estimateGas = async (
+  from: token,
+  to: token,
+  input: number,
+  output: number,
+  signer: any,
+  addy: String
+) => {
+  if (from.symbol == 'ETH') {
+    const contract = new ethers.Contract(uniswap.address, uniswap.abi, signer)
+    console.log(from, to, input, output, signer, addy)
+    contract.callStatic
+      .swapExactETHForTokensSupportingFeeOnTransferTokens(
+        //output * Math.pow(10, to.decimals),
+        0,
+        [from.address, to.address],
+        addy,
+        Date.now() + 60 * 5,
+        {
+          value: BigInt(input * Math.pow(10, 18)),
+        }
+      )
+      .then((res) => {
+        res.wait().then((res: any) => {
+          console.log(res)
+        })
+      })
+  } else if (to.symbol == 'ETH') {
+    const contract = new ethers.Contract(uniswap.address, uniswap.abi, signer)
+    console.log(from, to, input, output, signer, addy)
+    contract.callStatic
+      .swapExactTokensForETHSupportingFeeOnTransferTokens(
+        input * Math.pow(10, from.decimals),
+        0,
+        [from.address, to.address],
+        addy,
+        Date.now() + 60 * 5
+      )
+      .then((res) => {
+        console.log(res)
+      })
+  } else {
+    const contract = new ethers.Contract(uniswap.address, uniswap.abi, signer)
+    console.log(from, to, input, output, signer, addy)
+    contract.callStatic
+      .swapExactTokensForTokensSupportingFeeOnTransferTokens(
+        input * Math.pow(10, from.decimals),
+        0,
+        [from.address, to.address],
+        addy,
+        Date.now() + 60 * 5
+      )
+      .then((res) => {
+        res.wait().then((res: any) => {
+          console.log(res)
+        })
+      })
+  }
+}
+
 const useSwap = (currentInput: token, currentOutput: token) => {
-  const previewSwap = async (from: token, to: token, input: number) => {
+  const checkAllowance = async (address: string, tokenAddress: string) => {
+    const provider = new ethers.providers.StaticJsonRpcProvider(
+      'https://mainnet.infura.io/v3/9ed182e6c7b44c5fa80bd8c3b3779a6f'
+    )
+    const contract = new ethers.Contract(tokenAddress, erc20, provider)
+    const allowance = await contract.allowance(address, uniswap.address)
+    const res = (await allowance) / 1
+    return res
+  }
+
+  const approve = async (
+    address: string,
+    tokenAddress: string,
+    signer: any
+  ) => {
+    const contract = new ethers.Contract(tokenAddress, erc20, signer)
+    return contract.approve(uniswap.address, bigNumber)
+  }
+
+  const previewSwap = async (
+    from: token,
+    to: token,
+    input: number,
+    output: number,
+    prov: any,
+    addy: any
+  ) => {
     const provider = new ethers.providers.StaticJsonRpcProvider(
       'https://mainnet.infura.io/v3/9ed182e6c7b44c5fa80bd8c3b3779a6f'
     )
@@ -24,6 +112,7 @@ const useSwap = (currentInput: token, currentOutput: token) => {
         from.address,
         to.address,
       ])
+
       console.log(output)
       return (output[1] / Math.pow(10, to.decimals)).toFixed(2)
     } catch (error) {
@@ -75,21 +164,11 @@ const useSwap = (currentInput: token, currentOutput: token) => {
     }
   }
 
-  const fetchTokenData = async (address: string) => {
-    const data = await fetch(
-      'https://api.coingecko.com/api/v3/coins/ethereum/contract/' + address,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    )
-    const parsed = await data.json()
-  }
-
   return {
     previewSwap,
     swap,
+    checkAllowance,
+    approve
   }
 }
 
