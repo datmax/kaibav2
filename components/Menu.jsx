@@ -7,7 +7,6 @@ import Link from 'next/link'
 const links = [
   { name: 'Swap', href: '/swap' },
   { name: 'Farms', href: '/farms' },
-  { name: 'Buy', href: '/buy' },
 ]
 
 const variant = {
