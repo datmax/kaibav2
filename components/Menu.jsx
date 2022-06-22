@@ -5,7 +5,7 @@ import { Web3Context } from '../context/web3Context'
 
 import Link from 'next/link'
 const links = [
-  { name: 'Swap', href: '/swap' },
+  { name: 'Swap', href: '/' },
   { name: 'Farms', href: '/farms' },
 ]
 
