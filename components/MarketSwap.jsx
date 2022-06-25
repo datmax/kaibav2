@@ -25,7 +25,7 @@ function MarketSwap({ input, output, type, deadline, slippage }) {
     if (address) {
       if (input.symbol != 'ETH') {
         const allowance = await checkAllowance(address, input.address)
-        if (allowance == 0) {
+        if (allowance/1 > 0) {
           setApproved(false)
         } else {
           setApproved(true)
