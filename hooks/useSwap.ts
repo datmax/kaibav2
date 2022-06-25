@@ -86,7 +86,6 @@ const useSwap = (currentInput: token, currentOutput: token) => {
   }
 
   const approve = async (
-    address: string,
     tokenAddress: string,
     signer: any
   ) => {
@@ -119,6 +118,20 @@ const useSwap = (currentInput: token, currentOutput: token) => {
       return (output[1] / Math.pow(10, to.decimals)).toFixed(2)
     } catch (error) {
       throw new Error('Error during the preview')
+    }
+  }
+
+  const approved = async (address: string, token: token) => {
+    if (token.symbol != 'ETH') {
+      return true
+    } else {
+      const provider = new ethers.providers.StaticJsonRpcProvider(
+        'https://mainnet.infura.io/v3/9ed182e6c7b44c5fa80bd8c3b3779a6f'
+      )
+      const contract = new ethers.Contract(token.address, erc20, provider)
+      const allowance = await contract.allowance()
+      if (allowance / 1 > 0) return true
+      else return false
     }
   }
 
@@ -173,6 +186,7 @@ const useSwap = (currentInput: token, currentOutput: token) => {
     swap,
     checkAllowance,
     approve,
+    approved
   }
 }
 

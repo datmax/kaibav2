@@ -92,26 +92,38 @@ function MarketSwap({ input, output, type, deadline, slippage }) {
     if (network == 1) {
       const signer = await provider.getSigner()
       setApproving(true)
-      approve(address, input.address).then((res) => {
-        res
-          .wait()
-          .then((res) => {
-            setApproving(false)
-            setApproved(true)
-          })
-          .catch((err) => {
-            toast.error(err)
-            setApproving(false)
-          })
-          .catch((err) => {
-            toast.error(err)
-            setApproving(false)
-          })
-          .catch((err) => {
-            toast.error('Tx rejected.')
-            setApproving(false)
-          })
-      })
+      approve(input.address, signer)
+        .then((res) => {
+          res
+            .wait()
+            .then((res) => {
+              setApproving(false)
+              setApproved(true)
+            })
+            .catch((err) => {
+              toast.error(err)
+              console.log(err)
+              setApproving(false)
+            })
+            .catch((err) => {
+              toast.error(err)
+              console.log(err)
+
+              setApproving(false)
+            })
+            .catch((err) => {
+              toast.error('Tx rejected.')
+              console.log(err)
+
+              setApproving(false)
+            })
+        })
+        .catch((err) => {
+          console.log('Tx rejected.')
+          console.log(err)
+
+          setApproving(false)
+        })
     }
   }
 
@@ -261,7 +273,7 @@ function MarketSwap({ input, output, type, deadline, slippage }) {
                   transition: { duration: 0.3 },
                 }}
                 className="rounded-lg bg-white px-2 py-2 text-center text-xl font-thin text-black"
-                onClick={confirmSwap}
+                onClick={confirmApprove}
               >
                 Approve
               </motion.button>

@@ -30,7 +30,7 @@ const Swap = () => {
   useMemo(() => {
     const temp = output
     setOutput(input)
-    setInput(output)
+    setInput(temp)
   }, [isBuying])
 
   return (
