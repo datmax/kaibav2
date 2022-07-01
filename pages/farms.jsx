@@ -6,7 +6,7 @@ import FarmUnit from '../components/FarmUnit'
 import { getPriceByAddress } from '../web3/web3Helper'
 
 const KAIBA = '0xF2210f65235c2FB391aB8650520237E6378e5C5A'
-const FANG = '0x988fc5e37281f6c165886db96b3fdd2f61e6bb3f'
+const FANG = '0xb95A036f0c3464a649B59145AD8b371Ae5aB7A53'
 
 const Farms = () => {
   const { kaibaPool, fangPool, kaibaApy, fangApy } = useFarmsStatic()

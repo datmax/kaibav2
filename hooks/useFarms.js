@@ -7,7 +7,7 @@ const testUrl =
   'https://rpc.tenderly.co/fork/0e1aee75-985d-42d2-ab4b-b30319d253f1'
 const url = 'https://mainnet.infura.io/v3/8e8c4801cca84a098f713f7821399ee9'
 const KAIBA = '0xF2210f65235c2FB391aB8650520237E6378e5C5A'
-const FANG = '0x988fc5e37281f6c165886db96b3fdd2f61e6bb3f'
+const FANG = '0xb95A036f0c3464a649B59145AD8b371Ae5aB7A53'
 const dumb = '0x5c61a31d854E00C7446598898c67CC27744f8B88'
 const LPPool = ''
 export function useFarmsStatic() {
