@@ -14,7 +14,7 @@ const staticTokens = [
     logo: '/kaiba-logo-white.png',
   },
   {
-    address: '0x988fc5e37281f6c165886db96b3fdd2f61e6bb3f',
+    address: '0xe20bdbDe01051E31b595C06f42c8B82E44c68e94',
     name: 'Fang Token',
     symbol: 'FANG',
     decimals: '18',
