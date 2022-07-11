@@ -8,7 +8,7 @@ const header = {
 }
 const empty = '0x0000000000000000000000000000000000000000'
 
-const url = 'https://mainnet.infura.io/v3/9ed182e6c7b44c5fa80bd8c3b3779a6f'
+const url = 'https://mainnet.infura.io/v3/2a73bb747c7f4e9690d80b478f1e6b6c'
 
 export async function getPriceByAddress(address) {
   let req = await fetch(
